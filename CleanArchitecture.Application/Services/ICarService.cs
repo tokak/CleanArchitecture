@@ -1,4 +1,6 @@
 ﻿using CleanArchitecture.Application.Features.CarFeatures.Commands.CreateCar;
+using CleanArchitecture.Application.Features.CarFeatures.Queries.GetAllCar;
+using CleanArchitecture.Domain.Entities;
 
 namespace CleanArchitecture.Application.Services;
 
@@ -6,6 +8,8 @@ public interface ICarService
 {
 
     Task CreateAsync(CreateCarCommand request, CancellationToken cancellationToken);
+    Task<IList<Car>> GetAllAsync(GetAllQuery request,CancellationToken cancellationToken);
+    
     /*
     * CreateCarCommand request: 
     * - Araba oluşturma işlemi için gerekli verileri içeren bir komut nesnesidir.

@@ -1,9 +1,10 @@
 ﻿using CleanArchitecture.Domain.Abstractions;
+using GenericRepository;
 using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Persistance.Context;
 
-public sealed class AppDbContext : DbContext
+public sealed class AppDbContext : DbContext, IUnitOfWork
 {
     //1. yöntem
     //AppDbContext context = new();
