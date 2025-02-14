@@ -7,6 +7,7 @@ using CleanArchitecture.Persistance.Context;
 using CleanArchitecture.Persistance.Repositories;
 using CleanArchitecture.Persistance.Services;
 using CleanArchitecture.WepApi.Middleware;
+using CleanArchitecture.WepApi.OptionsSetup;
 using FluentValidation;
 using GenericRepository;
 using MediatR;
@@ -22,6 +23,9 @@ builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<IUnitOfWork>(srv => srv.GetRequiredService<AppDbContext>());
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.ConfigureOptions<JwtOptionsSetup>();
+builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
+builder.Services.AddAuthentication().AddJwtBearer();
 
 
 builder.Services.AddFluentEmail(builder.Configuration.ToString());
