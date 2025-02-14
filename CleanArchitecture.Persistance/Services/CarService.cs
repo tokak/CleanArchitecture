@@ -46,10 +46,16 @@ namespace CleanArchitecture.Persistance.Services
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<IList<Car>> GetAllAsync(GetAllQuery request, CancellationToken cancellationToken)
+        public async Task<Pagination.IPage<Car>> GetAllAsync(GetAllQuery request, CancellationToken cancellationToken)
         {
-           IList<Car> cars = await _carRepository.GetAll().ToListAsync(cancellationToken);
-            return cars;
+            //       Pagination.IPage<Car> cars = await _carRepository
+            //.GetAll()
+            //.Where(x => string.IsNullOrEmpty(request.Search) || x.Name.ToLower().Contains(request.Search.ToLower()))
+            //.ToListAsync(request.PageNumber,request.PageSize,cancellationToken).;
+            //       return cars;
+            //   }
+
+            return null;
         }
     }
 }

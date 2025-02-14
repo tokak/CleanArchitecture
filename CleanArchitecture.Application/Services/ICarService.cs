@@ -8,7 +8,7 @@ public interface ICarService
 {
 
     Task CreateAsync(CreateCarCommand request, CancellationToken cancellationToken);
-    Task<IList<Car>> GetAllAsync(GetAllQuery request,CancellationToken cancellationToken);
+    Task<Pagination.IPage<Car>> GetAllAsync(GetAllQuery request,CancellationToken cancellationToken);
     
     /*
     * CreateCarCommand request: 

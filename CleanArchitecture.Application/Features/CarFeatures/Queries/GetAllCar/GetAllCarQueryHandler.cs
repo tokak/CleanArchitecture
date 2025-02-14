@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Application.Features.CarFeatures.Queries.GetAllCar
 {
-    public sealed class GetAllCarQueryHandler : IRequestHandler<GetAllQuery, IList<Car>>
+    public sealed class GetAllCarQueryHandler : IRequestHandler<GetAllQuery, Pagination.IPage<Car>>
     {
         private readonly ICarService _carService;
 
@@ -18,9 +18,9 @@ namespace CleanArchitecture.Application.Features.CarFeatures.Queries.GetAllCar
             _carService = carService;
         }
 
-        public async Task<IList<Car>> Handle(GetAllQuery request, CancellationToken cancellationToken)
+        public async Task<Pagination.IPage<Car>> Handle(GetAllQuery request, CancellationToken cancellationToken)
         {
-            IList<Car> cars = await _carService.GetAllAsync(request,cancellationToken);
+            Pagination.IPage<Car> cars = await _carService.GetAllAsync(request,cancellationToken);
             return cars;
         }
     }

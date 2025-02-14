@@ -23,7 +23,7 @@ public sealed class CarsController : ApiController
     public async Task<IActionResult> GetAll(GetAllQuery request, CancellationToken cancellationToken)
     {
         
-        IList<Car> response = await _mediator.Send(request, cancellationToken);
+        Pagination.IPage<Car> response = await _mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 }
