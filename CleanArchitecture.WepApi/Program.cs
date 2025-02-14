@@ -27,6 +27,9 @@ builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<IUnitOfWork>(srv => srv.GetRequiredService<AppDbContext>());
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IUserRoleService, UserRoleService>();
+builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 
 builder.Services.ConfigureOptions<JwtOptionsSetup>();
 builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
@@ -46,7 +49,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(connectionString);
 });
-builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+builder.Services.AddIdentity<AppUser, Role>(options =>
 {
     options.Password.RequireDigit = false;
     options.Password.RequiredLength = 1;

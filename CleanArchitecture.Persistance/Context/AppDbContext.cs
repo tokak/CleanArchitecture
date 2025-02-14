@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Persistance.Context;
 
-public sealed class AppDbContext : IdentityDbContext<AppUser,IdentityRole,string>, IUnitOfWork
+public sealed class AppDbContext : IdentityDbContext<AppUser,Role,string>, IUnitOfWork
 {
     //1. yöntem
     //AppDbContext context = new();
