@@ -5,7 +5,5 @@ public sealed record LoginCommandResponse(
     string RefreshToken,
     DateTime? RefreshTokenExpiryTime,
     string UserId,
-    string UserName,
-    string Email,
-    string UserNameAndLastName);
+    string Email);
 

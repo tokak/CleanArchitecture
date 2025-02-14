@@ -16,18 +16,18 @@ public sealed class JwtProvider : IJwtProvider
     private readonly JwtOptions _jwtOptions;
     private readonly UserManager<AppUser> _userManager;
 
-    public JwtProvider(IOptions<JwtOptions> jwtOptions)
+    public JwtProvider(IOptions<JwtOptions> jwtOptions, UserManager<AppUser> userManager)
     {
         _jwtOptions = jwtOptions.Value;
+        _userManager = userManager;
     }
 
     public async Task<LoginCommandResponse> CreateTokenAsync(AppUser appUser)
     {
+        var user = await _userManager.FindByEmailAsync(appUser.Email);
         var claims = new Claim[]
         {
-            new Claim(ClaimTypes.Email,appUser.Email),
-            new Claim(JwtRegisteredClaimNames.Name,appUser.UserName),
-            new Claim("NameLastName",appUser.NameLastName)
+            new Claim("NameLastName",user.NameLastName)
         };
 
         DateTime expires = DateTime.Now.AddHours(1);
@@ -35,18 +35,18 @@ public sealed class JwtProvider : IJwtProvider
         JwtSecurityToken jwtSecurityToken = new(
             issuer: _jwtOptions.Issuer,
             audience: _jwtOptions.Audience,
-            claims: null,
+            claims: claims,
             notBefore: DateTime.Now,
-            expires: DateTime.Now.AddHours(1),
+            expires: expires,
             signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)),SecurityAlgorithms.HmacSha256));
 
         string token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
         string refreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
-        appUser.RefreshToken = refreshToken;
-        appUser.RefreshTokenExpiryTime = expires.AddMinutes(15);
-        await _userManager.UpdateAsync(appUser);
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpiryTime = expires.AddMinutes(15);
+       var result = await _userManager.UpdateAsync(user);
 
-        LoginCommandResponse response = new(token,refreshToken,appUser.RefreshTokenExpiryTime,appUser.Id,appUser.UserName,appUser.Email,appUser.NameLastName);
+        LoginCommandResponse response = new(token,refreshToken,appUser.RefreshTokenExpiryTime,appUser.Id,appUser.Email);
 
         return response;
 

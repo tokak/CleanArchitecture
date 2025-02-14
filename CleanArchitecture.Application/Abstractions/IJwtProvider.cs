@@ -10,6 +10,6 @@ namespace CleanArchitecture.Application.Abstractions
 {
     public interface IJwtProvider
     {
-        Task<LoginCommandResponse> CreateToken(AppUser appUser);
+        Task<LoginCommandResponse> CreateTokenAsync(AppUser appUser);
     }
 }
