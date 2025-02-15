@@ -8,6 +8,7 @@ using CleanArchitecture.Infrastructure.Service;
 using CleanArchitecture.Persistance.Context;
 using CleanArchitecture.Persistance.Repositories;
 using CleanArchitecture.Persistance.Services;
+using CleanArchitecture.WebApi.Configurations;
 using CleanArchitecture.WepApi.Middleware;
 using CleanArchitecture.WepApi.OptionsSetup;
 using FluentValidation;
@@ -36,6 +37,17 @@ builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddAuthorization();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        policy
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials()
+        .SetIsOriginAllowed(policy => true));
+});
+
 
 builder.Services.AddFluentEmail(builder.Configuration.ToString());
 builder.Services.AddScoped<IEmailService, EmailService>();
@@ -58,6 +70,7 @@ builder.Services.AddIdentity<AppUser, Role>(options =>
     
     ).AddEntityFrameworkStores<AppDbContext>();
   
+
 
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(CleanArchitecture.Presentation.AssemblyReferance).Assembly);
@@ -99,6 +112,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+builder.Services
+    .InstallServices(
+    builder.Configuration,
+    builder.Host,
+    typeof(IServiceInstaller).Assembly);
+
+app.UseCors();
 
 app.UseErrorMiddlewareExtansions();
 
